@@ -5,7 +5,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include <algorithm>
-#include "FindCorners.h "
+#include "FindCorners.h"
 #include <stdio.h>
 #include <iostream>
 #include <time.h>
