@@ -1,7 +1,7 @@
 // CalibrationADAS.cpp : 定义控制台应用程序的入口点。
 //
 
-#include "stdafx.h"
+
 #include "opencv2/imgproc.hpp"
 #include "opencv2/highgui.hpp"
 #include <algorithm>
@@ -24,7 +24,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//读入原始图像
 	Mat src; //输入图像
 	cout << "This is a demo for Parking slot detection." << endl;
-	string filename = "Img1.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
+	string filename = "img1.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
 	src = imread(filename, -1);//载入测试图像
 	if (src.empty())//不能读取图像
 	{
