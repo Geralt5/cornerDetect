@@ -551,8 +551,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 		//getMax(imgCorners, imgCorner1, imgCorners);//1.4 获取每个像素点的得分
 	}
 
-	namedWindow("ROI");//创建窗口，显示原始图像
-	imshow("ROI", imgCorners); waitKey(0);
+
 
 	nonMaximumSuppression(imgCorners, cornerPoints, 0.01, 5, 3);//1.5 非极大值抑制算法进行过滤，获取棋盘格角点初步结果
 
@@ -563,8 +562,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 			circle(Src, cornerPoints[i], 5, CV_RGB(255, 0, 0), 2);
 		}
 	}
-	namedWindow("src");//创建窗口，显示原始图像
-	imshow("src", Src); waitKey(0);
+
 
 	//算两个方向的梯度
 	Mat imageDu(gray.size(), CV_32F);
@@ -603,8 +601,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 			
 		}
 	}
-	namedWindow("src");//创建窗口，显示原始图像
-	imshow("src", Src); waitKey(0);
+
 
 	Point maxLoc;
 	FileStorage fs2("test.xml", FileStorage::WRITE);//写XML文件

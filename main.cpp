@@ -24,16 +24,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	//读入原始图像
 	Mat src; //输入图像
 	cout << "This is a demo for Parking slot detection." << endl;
-	cout << "开始读入图像..." << endl;
-	string filename = "Img\\02.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
+	string filename = "Img1.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
 	src = imread(filename, -1);//载入测试图像
 	if (src.empty())//不能读取图像
 	{
 		printf("Cannot read image file: %s\n", filename.c_str());
 		return -1;
 	}
-	namedWindow("SrcImg");//创建窗口，显示原始图像
-	imshow("SrcImg", src);
+
 
 	vector<Point> corners;//存储找到的角点
 	FindCorners corner_detector(src);
