@@ -1,4 +1,3 @@
-
 #include "FindCorners.h"
 
 FindCorners::FindCorners()
