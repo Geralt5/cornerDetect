@@ -14,7 +14,7 @@ using namespace std;
 using std::vector;
 vector<Point2i> points;
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain(int argc, char* argv[])
 {
 	//Mat kernels;
 	//FileStorage fs2("templateA1.xml", FileStorage::READ);//读XML文件
