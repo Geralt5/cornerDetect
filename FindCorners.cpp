@@ -1,4 +1,4 @@
-#include "stdafx.h"
+
 #include "FindCorners.h"
 
 FindCorners::FindCorners()
