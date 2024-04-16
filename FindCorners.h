@@ -20,7 +20,7 @@ public:
 	~FindCorners();
 
 public:
-	void detectCorners(Mat &Src, vector<Point> &resultCornors,float scoreThreshold);
+	void detectCorners(Mat &Src, vector<Point> &resultCornors,float scoreThreshold, int num_threads);
 
 private:
 	//正态分布
