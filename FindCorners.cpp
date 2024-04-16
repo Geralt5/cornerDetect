@@ -514,7 +514,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 		Mat kernelA1, kernelB1, kernelC1, kernelD1;
 		createkernel(templateProps[i].x, templateProps[i].y, radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);//1.1 产生四种核
 		//std::cout << "kernelA:" << kernelA1 << endl << "kernelB:" << kernelB1 << endl
-			<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
+		//	<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
 
 		Mat imgCornerA1(imageNorm.size(), CV_32F);
 		Mat imgCornerB1(imageNorm.size(), CV_32F);
