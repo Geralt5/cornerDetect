@@ -21,7 +21,7 @@ int main() {
 
     // Draw each corner
     for (const Point& corner : corners) {
-        circle(image, corner, 5, Scalar(0, 255, 0), FILLED);
+        circle(image, corner, 5, Scalar(0, 255, 0), -1);
     }
 
     // Save the image with corners marked
