@@ -25,7 +25,7 @@ int main() {
     }
 
     // Save the image with corners marked
-    bool isSuccess = imwrite("Corners_Detected.png", image);
+    bool isSuccess = imwrite("output.png", image);
     if (!isSuccess) {
         cout << "Failed to save the image" << endl;
         return -1;

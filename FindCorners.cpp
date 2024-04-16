@@ -449,6 +449,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 	normalize(gray, imageNorm, 0, 1, cv::NORM_MINMAX, CV_32F);//对灰度图进行归一化
 
 	Mat imgCorners = Mat::zeros(imageNorm.size(), CV_32F);//卷积核得出的点
+	#pragma omp parallel for
 	for (int i = 0; i < 6; i++)
 	{
 		//按照论文步骤，第一步：用卷积核进行卷积的方式找出可能是棋盘格角点的点
@@ -494,7 +495,6 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 			circle(Src, cornerPoints[i], 5, CV_RGB(255, 0, 0), 2);
 		}
 	}
-
 
 	//算两个方向的梯度
 	Mat imageDu(gray.size(), CV_32F);
