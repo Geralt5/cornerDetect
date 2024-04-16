@@ -13,6 +13,7 @@
 #include <string>
 #include <glob.h>
 #include <vector>
+#include <omp.h>
 #include <dirent.h>  
 using namespace cv;
 using namespace std;
@@ -69,10 +70,10 @@ int main(int argc, char* argv[])
 		return -1;
 	}
         
-
+  int num_threads = atoi(argv[1]);
 	vector<Point> corners;//存储找到的角点
 	FindCorners corner_detector(src);
-	corner_detector.detectCorners(src, corners,0.025);
+	corner_detector.detectCorners(src, corners,0.025, num_threads);
 	return 0;
 }
 

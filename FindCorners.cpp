@@ -437,7 +437,7 @@ void FindCorners::scoreCorners(Mat img, Mat imgAngle, Mat imgWeight, vector<Poin
 	}
 	
 }
-void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float scoreThreshold){
+void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float scoreThreshold, int num_threads){
 	Mat gray, imageNorm;
 	gray = Mat(Src.size(), CV_8U);
 	if (Src.channels()==3)
@@ -449,6 +449,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 	normalize(gray, imageNorm, 0, 1, cv::NORM_MINMAX, CV_32F);//对灰度图进行归一化
 
 	Mat imgCorners = Mat::zeros(imageNorm.size(), CV_32F);//卷积核得出的点
+	omp_set_num_threads(num_threads);
 	#pragma omp parallel for
 	for (int i = 0; i < 6; i++)
 	{

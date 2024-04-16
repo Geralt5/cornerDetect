@@ -6,7 +6,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include <iostream>
 #include <vector>
-
+#include <omp.h>
 using namespace cv;
 using namespace std;
 using std::vector;
