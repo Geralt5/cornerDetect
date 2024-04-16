@@ -191,7 +191,7 @@ void FindCorners::getImageAngleAndWeight(Mat img, Mat &imgDu, Mat &imgDv, Mat &i
 //*************************************************************************//
 void FindCorners::nonMaximumSuppression(Mat& inputCorners, vector<Point>& outputCorners, float threshold, int margin, int patchSize)
 {
-	if (inputCorners.size <= 0)
+	if (inputCorners.total() <= 0)
 	{
 		cout << "The imput mat is empty!" << endl; return;
 	}
