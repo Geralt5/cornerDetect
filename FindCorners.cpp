@@ -59,29 +59,14 @@ void FindCorners::createkernel(float angle1, float angle2, int kernelSize, Mat &
 	}
 	//std::cout << "kernelA:" << kernelA << endl << "kernelB:" << kernelB << endl
 	//	<< "kernelC:" << kernelC<< endl << "kernelD:" << kernelD << endl;
-	//归一化
 	kernelA = kernelA / cv::sum(kernelA)[0];
 	kernelB = kernelB / cv::sum(kernelB)[0];
 	kernelC = kernelC / cv::sum(kernelC)[0];
 	kernelD = kernelD / cv::sum(kernelD)[0];
 
 }
-//**************************//获取最小值*****************************//
-//*************************************************************************//
+
 void FindCorners::getMin(Mat src1, Mat src2, Mat &dst){
-	//src1和src2的大小要一样
-	//if (src1.size() != src2.size())
-	//{
-	//	cout << "The size of matrix don't match" << endl;
-	//}
-	//dst = Mat::zeros(src1.size(), src1.type());
-	//for (int i = 0; i < src1.rows; i++)
-	//{
-	//	for (int j = 0; j < src1.cols; j++)
-	//	{
-	//		dst.ptr<float>(i)[j] = src1.ptr<float>(i)[j] <= src2.ptr<float>(i)[j] ? src1.ptr<float>(i)[j] : src2.ptr<float>(i)[j];
-	//	}
-	//}
 	int rowsLeft = src1.rows;
 	int colsLeft = src1.cols;
 	int rowsRight = src2.rows;
@@ -106,26 +91,8 @@ void FindCorners::getMin(Mat src1, Mat src2, Mat &dst){
 		}
 	}
 }
-//**************************//获取最大值*****************************//
-//*************************************************************************//
+
 void FindCorners::getMax(Mat src1, Mat src2, Mat &dst){
-	//src1和src2的大小要一样
-	//if (src1.size() != src2.size())
-	//{
-	//	cout << "The size of matrix don't match" << endl;
-	//}
-	//dst = Mat::zeros(src1.size(), src1.type());
-	//for (int i = 0; i < src1.cols; i++)
-	//{
-	//	const float* dataLeft = src1.ptr<float>(i);
-	//	const float* dataRight = src2.ptr<float>(i);
-	//	float* dataResult = dst.ptr<float>(i);
-	//	for (int j = 0; j < src1.rows; j++)
-	//	{
-	//		dataResult[j] = (dataLeft[j] >= dataRight[j]) ? dataLeft[j] : dataRight[j];
-	//	}
-	//}
-	//(没搞明白，只是换了种写法就不行了，就只能进行一次最大值的获取了。。)
 	int rowsLeft = src1.rows;
 	int colsLeft = src1.cols;
 	int rowsRight = src2.rows;
@@ -184,11 +151,7 @@ void FindCorners::getImageAngleAndWeight(Mat img, Mat &imgDu, Mat &imgDv, Mat &i
 		}
 	}
 }
-//**************************非极大值抑制*****************************//
-//inputCorners是输入角点，outputCorners是非极大值抑制后的角点
-//threshold是设定的阈值
-//margin是进行非极大值抑制时检查方块与输入矩阵边界的距离，patchSize是该方块的大小
-//*************************************************************************//
+
 void FindCorners::nonMaximumSuppression(Mat& inputCorners, vector<Point>& outputCorners, float threshold, int margin, int patchSize)
 {
 	if (inputCorners.total() <= 0)
@@ -256,28 +219,6 @@ void FindCorners::findModesMeanShift(vector<float> hist, vector<float> &hist_smo
 	}
 	if (allZeros)return;
 
-	//mode finding
-	//for (int i = 0; i < hist.size(); i++)
-	//{
-	//	int j = i;
-	//	while (true)
-	//	{
-	//		float h0 = hist_smoothed[j];
-	//		int j1 = (j - 1)<0 ? j - 1 + hist.size() : j - 1;
-	//		j1 = j>hist.size() ? j - 1 - hist.size() : j - 1;
-	//		int j2 = (j + 1)>hist.size() - 1 ? j + 1 - hist.size() : j + 1;
-	//		j2 = (j + 1)<0 ? j + 1 + hist.size() : j + 1;
-	//		float h1 = hist_smoothed[j1];
-	//		float h2 = hist_smoothed[j2];
-	//		if (h1 >= h0&&h1 >= h2)j = j1;
-	//		else if (h2 >= h0&&h2 >= h1)j = j2;
-	//		else break;
-	//	}
-	//	if (modes.size() == 0 || modes[i].x!=(float)j)
-	//	{
-
-	//	}
-	//}
 	for (int i = 0; i<hist.size(); ++i){
 		int j = i;
 		int curLeft = (j - 1)<0 ? j - 1 + hist.size() : j - 1;
@@ -542,15 +483,7 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 
 		getMax(imgCorners, imgCorner1, imgCorners);
 		getMax(imgCorners, imgCorner2, imgCorners);
-
-		//getMin(imgCornerA1, imgCornerB1, imgCornerA); getMin(imgCornerC1, imgCornerD1, imgCornerB);
-		//getMin(imgCornerA - imgCornerMean, imgCornerMean - imgCornerB, imgCorner1);
-		//getMin(imgCornerMean - imgCornerA, imgCornerB - imgCornerMean, imgCorner2);
-		//getMax(imgCorners, imgCorner2, imgCorners);//1.4 获取每个像素点的得分
-		//getMax(imgCorners, imgCorner1, imgCorners);//1.4 获取每个像素点的得分
 	}
-
-
 
 	nonMaximumSuppression(imgCorners, cornerPoints, 0.01, 5, 3);//1.5 非极大值抑制算法进行过滤，获取棋盘格角点初步结果
 
