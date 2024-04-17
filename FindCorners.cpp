@@ -434,56 +434,56 @@ void FindCorners::scoreCorners(Mat img, Mat imgAngle, Mat imgWeight, vector<Poin
 	}
 	
 }
-class Parallel_process : public cv::ParallelLoopBody {
-private:
-    const cv::Mat& imageNorm;
-    cv::Mat& imgCorners;
-    const std::vector<Point2f>& templateProps;
-    const std::vector<int>& radius;
-    FindCorners& cornerDetector;  // Reference to FindCorners instance
+// class Parallel_process : public cv::ParallelLoopBody {
+// private:
+//     const cv::Mat& imageNorm;
+//     cv::Mat& imgCorners;
+//     const std::vector<Point2f>& templateProps;
+//     const std::vector<int>& radius;
+//     FindCorners& cornerDetector;  // Reference to FindCorners instance
 
-public:
-    Parallel_process(const cv::Mat& imageNorm, cv::Mat& imgCorners,
-                     const std::vector<Point2f>& templateProps,
-                     const std::vector<int>& radius, FindCorners& cornerDetector)
-        : imageNorm(imageNorm), imgCorners(imgCorners),
-          templateProps(templateProps), radius(radius),
-          cornerDetector(cornerDetector) {}
+// public:
+//     Parallel_process(const cv::Mat& imageNorm, cv::Mat& imgCorners,
+//                      const std::vector<Point2f>& templateProps,
+//                      const std::vector<int>& radius, FindCorners& cornerDetector)
+//         : imageNorm(imageNorm), imgCorners(imgCorners),
+//           templateProps(templateProps), radius(radius),
+//           cornerDetector(cornerDetector) {}
 
-    virtual void operator()(const cv::Range& range) const override {
-        for (int i = range.start; i < range.end; i++) {
-            Mat kernelA1, kernelB1, kernelC1, kernelD1;
-            cornerDetector.createkernel(templateProps[i].x, templateProps[i].y,
-                                        radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);
+//     virtual void operator()(const cv::Range& range) const override {
+//         for (int i = range.start; i < range.end; i++) {
+//             Mat kernelA1, kernelB1, kernelC1, kernelD1;
+//             cornerDetector.createkernel(templateProps[i].x, templateProps[i].y,
+//                                         radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);
 
-            Mat imgCornerA1(imageNorm.size(), CV_32F);
-            Mat imgCornerB1(imageNorm.size(), CV_32F);
-            Mat imgCornerC1(imageNorm.size(), CV_32F);
-            Mat imgCornerD1(imageNorm.size(), CV_32F);
-            filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);
-            filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
-            filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
-            filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
+//             Mat imgCornerA1(imageNorm.size(), CV_32F);
+//             Mat imgCornerB1(imageNorm.size(), CV_32F);
+//             Mat imgCornerC1(imageNorm.size(), CV_32F);
+//             Mat imgCornerD1(imageNorm.size(), CV_32F);
+//             filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);
+//             filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
+//             filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
+//             filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
 
-            Mat imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;
-            Mat imgCornerA(imageNorm.size(), CV_32F);
-            Mat imgCornerB(imageNorm.size(), CV_32F);
-            Mat imgCorner1(imageNorm.size(), CV_32F);
-            Mat imgCorner2(imageNorm.size(), CV_32F);
+//             Mat imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;
+//             Mat imgCornerA(imageNorm.size(), CV_32F);
+//             Mat imgCornerB(imageNorm.size(), CV_32F);
+//             Mat imgCorner1(imageNorm.size(), CV_32F);
+//             Mat imgCorner2(imageNorm.size(), CV_32F);
 
-            cornerDetector.getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
-            cornerDetector.getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
-            cornerDetector.getMin(imgCornerA, imgCornerB, imgCorner1);
+//             cornerDetector.getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
+//             cornerDetector.getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
+//             cornerDetector.getMin(imgCornerA, imgCornerB, imgCorner1);
 
-            cornerDetector.getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
-            cornerDetector.getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
-            cornerDetector.getMin(imgCornerA, imgCornerB, imgCorner2);
+//             cornerDetector.getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
+//             cornerDetector.getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
+//             cornerDetector.getMin(imgCornerA, imgCornerB, imgCorner2);
 
-            cornerDetector.getMax(imgCorners, imgCorner1, imgCorners);
-            cornerDetector.getMax(imgCorners, imgCorner2, imgCorners);
-        }
-    }
-};
+//             cornerDetector.getMax(imgCorners, imgCorner1, imgCorners);
+//             cornerDetector.getMax(imgCorners, imgCorner2, imgCorners);
+//         }
+//     }
+// };
 void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float scoreThreshold, int num_threads){
 	Mat gray, imageNorm;
 	gray = Mat(Src.size(), CV_8U);
@@ -496,56 +496,56 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 	normalize(gray, imageNorm, 0, 1, cv::NORM_MINMAX, CV_32F);//对灰度图进行归一化
 
 	Mat imgCorners = Mat::zeros(imageNorm.size(), CV_32F);//卷积核得出的点
-	//C thread lib: vector<std::thread> threads;
+	vector<std::thread> threads;
 	//OpenMP: omp_set_num_threads(num_threads);
 	//OpenMP: #pragma omp parallel for
-	FindCorners cornerDetector;
-	Parallel_process processor(imageNorm, imgCorners, templateProps, radius, cornerDetector);
-    cv::parallel_for_(cv::Range(0, 6), processor);
+	//OpenCV: FindCorners cornerDetector;
+	//OpenCV: Parallel_process processor(imageNorm, imgCorners, templateProps, radius, cornerDetector);
+    //OpenCV: cv::parallel_for_(cv::Range(0, 6), processor);
 	//for (int i = 0; i < 6; i++)
-	//C thread lib: auto processKernel = [&](int i)
-	//Seq: {
-	// 	//按照论文步骤，第一步：用卷积核进行卷积的方式找出可能是棋盘格角点的点
-	// 	Mat kernelA1, kernelB1, kernelC1, kernelD1;
-	// 	createkernel(templateProps[i].x, templateProps[i].y, radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);//1.1 产生四种核
-	// 	//std::cout << "kernelA:" << kernelA1 << endl << "kernelB:" << kernelB1 << endl
-	// 	//	<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
+	auto processKernel = [&](int i)
+	{
+		//按照论文步骤，第一步：用卷积核进行卷积的方式找出可能是棋盘格角点的点
+		Mat kernelA1, kernelB1, kernelC1, kernelD1;
+		createkernel(templateProps[i].x, templateProps[i].y, radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);//1.1 产生四种核
+		//std::cout << "kernelA:" << kernelA1 << endl << "kernelB:" << kernelB1 << endl
+		//	<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
 
-	// 	Mat imgCornerA1(imageNorm.size(), CV_32F);
-	// 	Mat imgCornerB1(imageNorm.size(), CV_32F);
-	// 	Mat imgCornerC1(imageNorm.size(), CV_32F);
-	// 	Mat imgCornerD1(imageNorm.size(), CV_32F);
-	// 	filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);//1.2 用所产生的核对图像做卷积
-	// 	filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
-	// 	filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
-	// 	filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
+		Mat imgCornerA1(imageNorm.size(), CV_32F);
+		Mat imgCornerB1(imageNorm.size(), CV_32F);
+		Mat imgCornerC1(imageNorm.size(), CV_32F);
+		Mat imgCornerD1(imageNorm.size(), CV_32F);
+		filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);//1.2 用所产生的核对图像做卷积
+		filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
+		filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
+		filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
 
-	// 	Mat imgCornerMean(imageNorm.size(), CV_32F);
-	// 	imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;//1.3 按照公式进行计算
-	// 	Mat imgCornerA(imageNorm.size(), CV_32F);
-	// 	Mat imgCornerB(imageNorm.size(), CV_32F);
-	// 	Mat imgCorner1(imageNorm.size(), CV_32F);
-	// 	Mat imgCorner2(imageNorm.size(), CV_32F);
+		Mat imgCornerMean(imageNorm.size(), CV_32F);
+		imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;//1.3 按照公式进行计算
+		Mat imgCornerA(imageNorm.size(), CV_32F);
+		Mat imgCornerB(imageNorm.size(), CV_32F);
+		Mat imgCorner1(imageNorm.size(), CV_32F);
+		Mat imgCorner2(imageNorm.size(), CV_32F);
 
-	// 	getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
-	// 	getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
-	// 	getMin(imgCornerA, imgCornerB, imgCorner1);
+		getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
+		getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
+		getMin(imgCornerA, imgCornerB, imgCorner1);
 
-	// 	getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
-	// 	getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
-	// 	getMin(imgCornerA, imgCornerB, imgCorner2);
+		getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
+		getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
+		getMin(imgCornerA, imgCornerB, imgCorner2);
 
-	// 	getMax(imgCorners, imgCorner1, imgCorners);
-	// 	getMax(imgCorners, imgCorner2, imgCorners);
-	// }//C thread lib: ;
+		getMax(imgCorners, imgCorner1, imgCorners);
+		getMax(imgCorners, imgCorner2, imgCorners);
+	};
 	
-	// C thread lib: for (int i = 0; i < num_threads; i++) {
-    //     threads.emplace_back(processKernel, i);
-    // }
+	C thread lib: for (int i = 0; i < num_threads; i++) {
+        threads.emplace_back(processKernel, i);
+    }
 
-    // C thread lib: for (auto& t : threads) {
-    //     t.join();
-    // }
+    C thread lib: for (auto& t : threads) {
+        t.join();
+    }
 
 	nonMaximumSuppression(imgCorners, cornerPoints, 0.01, 5, 3);//1.5 非极大值抑制算法进行过滤，获取棋盘格角点初步结果
 
