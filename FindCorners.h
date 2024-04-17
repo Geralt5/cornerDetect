@@ -36,9 +36,9 @@ private:
 	void refineCorners(vector<Point> &cornors, Mat imgDu, Mat imgDv, Mat imgAngle, Mat imgWeight, float radius);
 	void createkernel(float angle1, float angle2, int kernelSize, Mat &kernelA, Mat &kernelB, Mat &kernelC, Mat &kernelD);
 	void nonMaximumSuppression(Mat& inputCorners, vector<Point>& outputCorners, float threshold, int margin, int patchSize);
-	void FindCorners::createkernel(float angle1, float angle2, int kernelSize, Mat &kernelA, Mat &kernelB, Mat &kernelC, Mat &kernelD);
-	void FindCorners::getMin(Mat src1, Mat src2, Mat &dst);
-	void FindCorners::getMax;
+	void createkernel(float angle1, float angle2, int kernelSize, Mat &kernelA, Mat &kernelB, Mat &kernelC, Mat &kernelD);
+	void getMin(Mat src1, Mat src2, Mat &dst);
+	void getMaxgetMax(Mat src1, Mat src2, Mat &dst);
 
 private:
 	vector<Point2f> templateProps;
