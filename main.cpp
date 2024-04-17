@@ -68,7 +68,13 @@ int main(int argc, char* argv[])
     return -1;
   }
         
-  int num_threads = atoi(argv[1]);
+  if (argc < 2) {
+        num_threads = 1;  // You can set this to any default you see fit
+        cout << "No thread number provided. Using default: " << num_threads << endl;
+    } else {
+        num_threads = atoi(argv[1]);
+        cout << "Number of threads: " << num_threads << endl;
+    }
   vector<Point> corners;
   FindCorners corner_detector(src);
   corner_detector.detectCorners(src, corners,0.025, num_threads);
