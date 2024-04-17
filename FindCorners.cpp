@@ -82,7 +82,7 @@ void FindCorners::getMin(Mat src1, Mat src2, Mat &dst){
 		nr = 1;
 		//std::cout<<"continue"<<std::endl;
 	}
-	#pragma omp parallel for
+	//OpenMP:#pragma omp parallel for
 	for (int i = 0; i<nr; i++){
 		const float* dataLeft = src1.ptr<float>(i);
 		const float* dataRight = src2.ptr<float>(i);
@@ -109,7 +109,7 @@ void FindCorners::getMax(Mat src1, Mat src2, Mat &dst){
 		nr = 1;
 		//std::cout<<"continue"<<std::endl;
 	}
-	#pragma omp parallel for
+	//OpenMp:#pragma omp parallel for
 	for (int i = 0; i<nr; i++){
 		const float* dataLeft = src1.ptr<float>(i);
 		const float* dataRight = src2.ptr<float>(i);
@@ -451,8 +451,8 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 	normalize(gray, imageNorm, 0, 1, cv::NORM_MINMAX, CV_32F);//对灰度图进行归一化
 
 	Mat imgCorners = Mat::zeros(imageNorm.size(), CV_32F);//卷积核得出的点
-	omp_set_num_threads(num_threads);
-	#pragma omp parallel for
+	//OpenMP: omp_set_num_threads(num_threads);
+	//OpenMP: #pragma omp parallel for
 	for (int i = 0; i < 6; i++)
 	{
 		//按照论文步骤，第一步：用卷积核进行卷积的方式找出可能是棋盘格角点的点
