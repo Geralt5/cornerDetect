@@ -18,59 +18,6 @@ FindCorners::FindCorners(Mat img)
 	templateProps.push_back(Point2f((float)CV_PI / 4, (float)-CV_PI / 4));
 }
 
-class Parallel_process : public cv::ParallelLoopBody
-{
-private:
-    const cv::Mat& imageNorm;
-    cv::Mat& imgCorners;
-    const std::vector<Point2f>& templateProps;
-    const std::vector<int>& radius;
-
-public:
-    Parallel_process(const cv::Mat& imageNorm, cv::Mat& imgCorners, const std::vector<Point2f>& templateProps, const std::vector<int>& radius)
-        : imageNorm(imageNorm), imgCorners(imgCorners), templateProps(templateProps), radius(radius)
-    {
-    }
-
-    virtual void operator()(const cv::Range& range) const
-    {
-        for (int i = range.start; i < range.end; i++)
-        {
-			Mat kernelA1, kernelB1, kernelC1, kernelD1;
-			createkernel(templateProps[i].x, templateProps[i].y, radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);//1.1 产生四种核
-			//std::cout << "kernelA:" << kernelA1 << endl << "kernelB:" << kernelB1 << endl
-			//	<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
-
-			Mat imgCornerA1(imageNorm.size(), CV_32F);
-			Mat imgCornerB1(imageNorm.size(), CV_32F);
-			Mat imgCornerC1(imageNorm.size(), CV_32F);
-			Mat imgCornerD1(imageNorm.size(), CV_32F);
-			filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);//1.2 用所产生的核对图像做卷积
-			filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
-			filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
-			filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
-
-			Mat imgCornerMean(imageNorm.size(), CV_32F);
-			imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;//1.3 按照公式进行计算
-			Mat imgCornerA(imageNorm.size(), CV_32F);
-			Mat imgCornerB(imageNorm.size(), CV_32F);
-			Mat imgCorner1(imageNorm.size(), CV_32F);
-			Mat imgCorner2(imageNorm.size(), CV_32F);
-
-			getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
-			getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
-			getMin(imgCornerA, imgCornerB, imgCorner1);
-
-			getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
-			getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
-			getMin(imgCornerA, imgCornerB, imgCorner2);
-
-			getMax(imgCorners, imgCorner1, imgCorners);
-			getMax(imgCorners, imgCorner2, imgCorners);
-        }
-    }
-};
-
 
 float FindCorners::normpdf(float dist, float mu, float sigma){
 	return exp(-0.5*(dist - mu)*(dist - mu) / (sigma*sigma)) / (std::sqrt(2 * CV_PI)*sigma);
@@ -487,6 +434,58 @@ void FindCorners::scoreCorners(Mat img, Mat imgAngle, Mat imgWeight, vector<Poin
 	}
 	
 }
+class Parallel_process : public cv::ParallelLoopBody
+{
+private:
+    const cv::Mat& imageNorm;
+    cv::Mat& imgCorners;
+    const std::vector<Point2f>& templateProps;
+    const std::vector<int>& radius;
+
+public:
+    Parallel_process(const cv::Mat& imageNorm, cv::Mat& imgCorners, const std::vector<Point2f>& templateProps, const std::vector<int>& radius)
+        : imageNorm(imageNorm), imgCorners(imgCorners), templateProps(templateProps), radius(radius)
+    {
+    }
+
+    virtual void operator()(const cv::Range& range) const
+    {
+        for (int i = range.start; i < range.end; i++)
+        {
+			Mat kernelA1, kernelB1, kernelC1, kernelD1;
+			createkernel(templateProps[i].x, templateProps[i].y, radius[i / 2], kernelA1, kernelB1, kernelC1, kernelD1);//1.1 产生四种核
+			//std::cout << "kernelA:" << kernelA1 << endl << "kernelB:" << kernelB1 << endl
+			//	<< "kernelC:" << kernelC1 << endl << "kernelD:" << kernelD1 << endl;
+
+			Mat imgCornerA1(imageNorm.size(), CV_32F);
+			Mat imgCornerB1(imageNorm.size(), CV_32F);
+			Mat imgCornerC1(imageNorm.size(), CV_32F);
+			Mat imgCornerD1(imageNorm.size(), CV_32F);
+			filter2D(imageNorm, imgCornerA1, CV_32F, kernelA1);//1.2 用所产生的核对图像做卷积
+			filter2D(imageNorm, imgCornerB1, CV_32F, kernelB1);
+			filter2D(imageNorm, imgCornerC1, CV_32F, kernelC1);
+			filter2D(imageNorm, imgCornerD1, CV_32F, kernelD1);
+
+			Mat imgCornerMean(imageNorm.size(), CV_32F);
+			imgCornerMean = (imgCornerA1 + imgCornerB1 + imgCornerC1 + imgCornerD1) / 4;//1.3 按照公式进行计算
+			Mat imgCornerA(imageNorm.size(), CV_32F);
+			Mat imgCornerB(imageNorm.size(), CV_32F);
+			Mat imgCorner1(imageNorm.size(), CV_32F);
+			Mat imgCorner2(imageNorm.size(), CV_32F);
+
+			getMin(imgCornerA1 - imgCornerMean, imgCornerB1 - imgCornerMean, imgCornerA);
+			getMin(imgCornerMean - imgCornerC1, imgCornerMean - imgCornerD1, imgCornerB);
+			getMin(imgCornerA, imgCornerB, imgCorner1);
+
+			getMin(imgCornerMean - imgCornerA1, imgCornerMean - imgCornerB1, imgCornerA);
+			getMin(imgCornerC1 - imgCornerMean, imgCornerD1 - imgCornerMean, imgCornerB);
+			getMin(imgCornerA, imgCornerB, imgCorner2);
+
+			getMax(imgCorners, imgCorner1, imgCorners);
+			getMax(imgCorners, imgCorner2, imgCorners);
+        }
+    }
+};
 void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float scoreThreshold, int num_threads){
 	Mat gray, imageNorm;
 	gray = Mat(Src.size(), CV_8U);
