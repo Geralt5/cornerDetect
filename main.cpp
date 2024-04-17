@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
     printf("Cannot read image file: %s\n", filename.c_str());
     return -1;
   }
-        
+  int num_threads;
   if (argc < 2) {
         num_threads = 1;  // You can set this to any default you see fit
         cout << "No thread number provided. Using default: " << num_threads << endl;
