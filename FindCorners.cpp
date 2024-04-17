@@ -77,7 +77,7 @@ void FindCorners::getMin(Mat src1, Mat src2, Mat &dst){
 		nr = 1;
 		//std::cout<<"continue"<<std::endl;
 	}
-	//OpenMP:#pragma omp parallel for
+	#pragma omp parallel for
 	for (int i = 0; i<nr; i++){
 		const float* dataLeft = src1.ptr<float>(i);
 		const float* dataRight = src2.ptr<float>(i);
@@ -104,7 +104,7 @@ void FindCorners::getMax(Mat src1, Mat src2, Mat &dst){
 		nr = 1;
 		//std::cout<<"continue"<<std::endl;
 	}
-	//OpenMp:#pragma omp parallel for
+	#pragma omp parallel for
 	for (int i = 0; i<nr; i++){
 		const float* dataLeft = src1.ptr<float>(i);
 		const float* dataRight = src2.ptr<float>(i);
