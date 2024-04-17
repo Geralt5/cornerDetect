@@ -24,7 +24,14 @@ int main(int argc, char* argv[])
 {
   Mat src; 
   cout << "This is a demo for corner detection." << endl;
-
+  int num_threads;
+  if (argc < 2) {
+        num_threads = 1;  // You can set this to any default you see fit
+        cout << "No thread number provided. Using default: " << num_threads << endl;
+    } else {
+        num_threads = atoi(argv[1]);
+        cout << "Number of threads: " << num_threads << endl;
+    }
   // //add file procedure
   // std::string images_dir = "calibration/images";  // Adjust path if needed
   // std::vector<std::string> image_paths;
@@ -67,14 +74,7 @@ int main(int argc, char* argv[])
     printf("Cannot read image file: %s\n", filename.c_str());
     return -1;
   }
-  int num_threads;
-  if (argc < 2) {
-        num_threads = 1;  // You can set this to any default you see fit
-        cout << "No thread number provided. Using default: " << num_threads << endl;
-    } else {
-        num_threads = atoi(argv[1]);
-        cout << "Number of threads: " << num_threads << endl;
-    }
+
   vector<Point> corners;
   FindCorners corner_detector(src);
   corner_detector.detectCorners(src, corners,0.025, num_threads);
