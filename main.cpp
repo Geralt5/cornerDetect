@@ -62,18 +62,18 @@ int main(int argc, char* argv[])
   //     corner_detector.detectCorners(src, corners, 0.025);
   // }
  
-	string filename = "img1.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
-	src = imread(filename, -1);//载入测试图像
-	if (src.empty())//不能读取图像
-	{
-		printf("Cannot read image file: %s\n", filename.c_str());
-		return -1;
-	}
+  string filename = "img1.png";//图像路径位置 "Img\\birdView0015.png"   calib\\_70.png
+  src = imread(filename, -1);//载入测试图像
+  if (src.empty())//不能读取图像
+  {
+    printf("Cannot read image file: %s\n", filename.c_str());
+    return -1;
+  }
         
   int num_threads = atoi(argv[1]);
-	vector<Point> corners;//存储找到的角点
-	FindCorners corner_detector(src);
-	corner_detector.detectCorners(src, corners,0.025, num_threads);
-	return 0;
+  vector<Point> corners;//存储找到的角点
+  FindCorners corner_detector(src);
+  corner_detector.detectCorners(src, corners,0.025, num_threads);
+  return 0;
 }
 
