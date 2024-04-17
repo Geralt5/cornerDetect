@@ -539,11 +539,11 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 		getMax(imgCorners, imgCorner2, imgCorners);
 	};
 	
-	C thread lib: for (int i = 0; i < num_threads; i++) {
+	for (int i = 0; i < num_threads; i++) {
         threads.emplace_back(processKernel, i);
     }
 
-    C thread lib: for (auto& t : threads) {
+   for (auto& t : threads) {
         t.join();
     }
 
