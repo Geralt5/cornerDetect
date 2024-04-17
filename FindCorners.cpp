@@ -451,12 +451,9 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 	normalize(gray, imageNorm, 0, 1, cv::NORM_MINMAX, CV_32F);//对灰度图进行归一化
 
 	Mat imgCorners = Mat::zeros(imageNorm.size(), CV_32F);//卷积核得出的点
-	//C thread lib: vector<std::thread> threads;
 	//OpenMP: omp_set_num_threads(num_threads);
 	//OpenMP: #pragma omp parallel for
-	
 	for (int i = 0; i < 6; i++)
-	//C thread lib: auto processKernel = [&](int i)
 	{
 		//按照论文步骤，第一步：用卷积核进行卷积的方式找出可能是棋盘格角点的点
 		Mat kernelA1, kernelB1, kernelC1, kernelD1;
@@ -490,15 +487,8 @@ void FindCorners::detectCorners(Mat &Src, vector<Point> &resultCornors, float sc
 
 		getMax(imgCorners, imgCorner1, imgCorners);
 		getMax(imgCorners, imgCorner2, imgCorners);
-	}//C thread lib: ;
+	}
 
-	// C thread lib: for (int i = 0; i < num_threads; i++) {
-    //     threads.emplace_back(processKernel, i);
-    // }
-
-    // C thread lib: for (auto& t : threads) {
-    //     t.join();
-    // }
 	nonMaximumSuppression(imgCorners, cornerPoints, 0.01, 5, 3);//1.5 非极大值抑制算法进行过滤，获取棋盘格角点初步结果
 
 	if (cornerPoints.size()>0)
