@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
       // Detect corners in the image
       vector<Point> corners;
       FindCorners corner_detector(src);
-      corner_detector.detectCorners(src, corners, 0.025);
+      corner_detector.detectCorners(src, corners, 0.025, num_threads);
   }
  
   // string filename = "img1.png";
