@@ -67,7 +67,7 @@ int main(int argc, char* argv[])
   //     corner_detector.detectCorners(src, corners, 0.025, num_threads);
   // }
  
-  string filename = "img1.png";
+  string filename = "calibration/images/frame_00001421.png";
   src = imread(filename, -1);
   if (src.empty())
   {
