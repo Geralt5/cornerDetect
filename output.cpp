@@ -7,7 +7,7 @@ using namespace std;
 
 int main() {
     // Load the image on which to draw corners
-    Mat image = imread("img1.png");
+    Mat image = imread("calibration/images/frame_00001421.png");
     if (image.empty()) {
         cout << "Could not open or find the image" << endl;
         return -1;
